@@ -21,7 +21,7 @@ resource "azuread_application" "main" {
   name = (
     var.name != "" ?
     var.name :
-    "terraform-${random_id.name[0].hex}"
+    random_id.name[0].hex
   )
   available_to_other_tenants = false
 }
