@@ -34,3 +34,14 @@ output "sdk_auth" {
   sensitive   = true
   description = "Output JSON compatible with the Azure SDK auth file."
 }
+
+output "client_id" {
+  value       = azuread_application.main.id
+  description = "The client ID."
+}
+
+output "client_secret" {
+  value       = azuread_service_principal_password.main[0].value
+  sensitive   = true
+  description = "The client secret."
+}
