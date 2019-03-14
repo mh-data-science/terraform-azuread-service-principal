@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/innovationnorway/terraform-azuread-service-principal/compare/v1.0.1...v1.0.2) (2019-03-14)
+
+
+### Bug Fixes
+
+* output `client_id` and `client_secret` ([104c361](https://github.com/innovationnorway/terraform-azuread-service-principal/commit/104c361))
+
 ## [1.0.1](https://github.com/innovationnorway/terraform-azuread-service-principal/compare/v1.0.0...v1.0.1) (2019-03-03)
 
 
