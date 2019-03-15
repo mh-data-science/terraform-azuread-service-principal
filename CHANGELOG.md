@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/innovationnorway/terraform-azuread-service-principal/compare/v1.0.2...v1.0.3) (2019-03-15)
+
+
+### Bug Fixes
+
+* **README:** copy-paste error in examples ([26e2832](https://github.com/innovationnorway/terraform-azuread-service-principal/commit/26e2832))
+
 ## [1.0.2](https://github.com/innovationnorway/terraform-azuread-service-principal/compare/v1.0.1...v1.0.2) (2019-03-14)
 
 
