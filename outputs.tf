@@ -4,7 +4,7 @@ output "display_name" {
 }
 
 output "application_id" {
-  value       = azuread_application.main.id
+  value       = azuread_application.main.application_id
   description = "The Application ID."
 }
 
@@ -36,7 +36,7 @@ output "sdk_auth" {
 }
 
 output "client_id" {
-  value       = azuread_application.main.id
+  value       = azuread_application.main.application_id
   description = "The client ID."
 }
 
