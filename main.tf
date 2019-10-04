@@ -13,6 +13,8 @@ resource "azuread_application" "main" {
   name = coalesce(var.name, random_id.name[0].hex)
 
   available_to_other_tenants = false
+
+  identifier_uris = [format("http://%s", var.name)]
 }
 
 resource "azuread_service_principal" "main" {
