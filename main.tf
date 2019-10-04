@@ -30,7 +30,7 @@ resource "azuread_service_principal" "main" {
   application_id = azuread_application.main.application_id
 }
 
-resource "random_string" "password" {
+resource "random_password" "main" {
   count   = var.password == "" ? 1 : 0
   length  = 32
   special = true
@@ -43,7 +43,7 @@ resource "azuread_service_principal_password" "main" {
   value = (
     var.password != "" ?
     var.password :
-    random_string.password[0].result
+    random_password.main[0].result
   )
   end_date = var.end_date
 
