@@ -11,7 +11,7 @@ Create a service principal and configure it's access to Azure resources.
 ```hcl
 module "service_principal" {
   source   = "innovationnorway/service-principal/azuread"
-  name     = "my-app"
+  name     = "example"
   years    = 2
 }
 
@@ -34,9 +34,9 @@ locals {
 
 module "service_principal" {
   source = "innovationnorway/service-principal/azuread"
-  name   = "my-app"
+  name   = "example"
   role   = "Contributor"
-  scopes = [local.subscriptions["my-app"]]
+  scopes = [local.subscriptions["example"]]
 }
 ```
 
@@ -45,15 +45,17 @@ module "service_principal" {
 ```hcl
 module "service_principal" {
   source   = "innovationnorway/service-principal/azuread"
+  name     = "example"
   end_date = "2299-12-30T23:00:00Z"
 }
 ```
 
 ### Use file-based authentication (SDK)
+
 ```hcl
 module "service_principal" {
   source = "innovationnorway/service-principal/azuread"
-  name   = "my-app"
+  name   = "example"
   role   = "Contributor"
 }
 

@@ -2,14 +2,6 @@ data "azurerm_client_config" "main" {}
 
 data "azurerm_subscription" "main" {}
 
-locals {
-  scopes = (
-    length(var.scopes) > 0 ?
-    var.scopes :
-    [data.azurerm_subscription.main.id]
-  )
-}
-
 resource "random_id" "name" {
   count  = var.name == "" ? 1 : 0
   prefix = "terraform-"
@@ -18,11 +10,8 @@ resource "random_id" "name" {
 }
 
 resource "azuread_application" "main" {
-  name = (
-    var.name != "" ?
-    var.name :
-    random_id.name[0].hex
-  )
+  name = coalesce(var.name, random_id.name[0].hex)
+
   available_to_other_tenants = false
 }
 
@@ -40,11 +29,8 @@ resource "azuread_service_principal_password" "main" {
   count                = var.password != null ? 1 : 0
   service_principal_id = azuread_service_principal.main.id
 
-  value = (
-    var.password != "" ?
-    var.password :
-    random_password.main[0].result
-  )
+  value = coalesce(var.password, random_password.main[0].result)
+
   end_date = var.end_date
 
   end_date_relative = (
