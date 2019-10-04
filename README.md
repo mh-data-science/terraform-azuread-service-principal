@@ -14,29 +14,21 @@ module "service_principal" {
   name     = "example"
   end_date = "2Y"
 }
-
-output "service_principal" {
-  value = module.service_principal
-}
 ```
 
 ### Configure access to Azure resources
 
 ```hcl
-data "azurerm_subscriptions" "my" {}
-
-locals {
-  subscriptions = ({ 
-    for s in data.azurerm_subscriptions.my.subscriptions : 
-    s.display_name => format("/subscriptions/%s", s.subscription_id)
-  })
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "westeurope"
 }
 
 module "service_principal" {
   source = "innovationnorway/service-principal/azuread"
   name   = "example"
   role   = "Contributor"
-  scopes = [local.subscriptions["example"]]
+  scopes = [azurerm_resource_group.example.id]
 }
 ```
 
@@ -69,7 +61,7 @@ resource "local_file" "sdk_auth_file" {
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `name` | `string` | ***Required.** The name of the service principal. |
+| `name` | `string` | **Required.** The name of the service principal. |
 | `password` | `string` | A password for the service principal. If missing, Terraform will generate a password. |
 | `end_date` | `string` | The date after which the password expire. This can either be relative duration or RFC3339 date. Default: `1Y`. |
 | `role` | `string` | The name of a role for the service principal. |
