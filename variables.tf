@@ -12,14 +12,8 @@ variable "password" {
 
 variable "end_date" {
   type        = string
-  default     = null
-  description = "The password expiry date. This should be RFC3339 date string."
-}
-
-variable "years" {
-  type        = number
-  default     = 1
-  description = "Number of years for which the password will be valid."
+  default     = "1Y"
+  description = "The relative duration or RFC3339 date after which the password expire."
 }
 
 variable "role" {
@@ -36,4 +30,31 @@ variable "scopes" {
 
 locals {
   scopes = length(var.scopes) > 0 ? var.scopes : [data.azurerm_subscription.main.id]
+
+  date = regexall("^(?:(\\d{4})-(\\d{2})-(\\d{2}))[Tt]?(?:(\\d{2}):(\\d{2})(?::(\\d{2}))?(?:\\.(\\d+))?)?([Zz]|[\\+|\\-]\\d{2}:\\d{2})?$", var.end_date)
+
+  duration = regexall("^(?:(\\d?)Y)?(?:(\\d?)M)?(?:(\\d+)W)?(?:(\\d+)D)?(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?$", var.end_date)
+
+  end_date_relative = length(local.duration) > 0 ? format(
+    "%dh",
+    (
+      (coalesce(local.duration[0][0], 0) * 24 * 365) +
+      (coalesce(local.duration[0][1], 0) * 24 * 30) +
+      (coalesce(local.duration[0][2], 0) * 24 * 7) +
+      (coalesce(local.duration[0][3], 0) * 24) +
+      coalesce(local.duration[0][4], 0)
+    )
+  ) : null
+
+  end_date = length(local.date) > 0 ? format(
+    "%02d-%02d-%02dT%02d:%02d:%02d.%02d%s",
+    local.date[0][0],
+    local.date[0][1],
+    local.date[0][2],
+    coalesce(local.date[0][3], "23"),
+    coalesce(local.date[0][4], "59"),
+    coalesce(local.date[0][5], "00"),
+    coalesce(local.date[0][6], "00"),
+    coalesce(local.date[0][7], "Z")
+  ) : null
 }

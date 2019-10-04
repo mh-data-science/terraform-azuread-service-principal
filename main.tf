@@ -33,13 +33,9 @@ resource "azuread_service_principal_password" "main" {
 
   value = coalesce(var.password, random_password.main[0].result)
 
-  end_date = var.end_date
+  end_date = local.end_date
 
-  end_date_relative = (
-    var.end_date == null ?
-    "${(var.years * 24 * 365)}h" :
-    null
-  )
+  end_date_relative = local.end_date_relative
 }
 
 data "azurerm_role_definition" "main" {

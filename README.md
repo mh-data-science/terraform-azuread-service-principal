@@ -12,7 +12,7 @@ Create a service principal and configure it's access to Azure resources.
 module "service_principal" {
   source   = "innovationnorway/service-principal/azuread"
   name     = "example"
-  years    = 2
+  end_date = "2Y"
 }
 
 output "service_principal" {
@@ -46,7 +46,7 @@ module "service_principal" {
 module "service_principal" {
   source   = "innovationnorway/service-principal/azuread"
   name     = "example"
-  end_date = "2299-12-30T23:00:00Z"
+  end_date = "2299-12-30"
 }
 ```
 
@@ -71,7 +71,6 @@ resource "local_file" "sdk_auth_file" {
 | --- | --- | --- |
 | `name` | `string` | The name of the service principal. |
 | `password` | `string` | A password for the service principal. If missing, Terraform will generate a password. |
-| `years` | `number` | Number of years for which the password will be valid. Default: `1`. |
-| `end_date` | `string` | Expiry date for the password. This should be RFC3339 date string. |
+| `end_date` | `string` | The date after which the password expire. This can either be relative duration or RFC3339 date. Default: `1Y`. |
 | `role` | `string` | The name of a role for the service principal. |
 | `scopes` | `list` | List of scopes the `role` assignment applies to. |
