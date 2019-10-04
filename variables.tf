@@ -1,6 +1,5 @@
 variable "name" {
   type        = string
-  default     = ""
   description = "The name of the service principal."
 }
 

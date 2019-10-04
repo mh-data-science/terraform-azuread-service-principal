@@ -69,7 +69,7 @@ resource "local_file" "sdk_auth_file" {
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `name` | `string` | The name of the service principal. |
+| `name` | `string` | ***Required.** The name of the service principal. |
 | `password` | `string` | A password for the service principal. If missing, Terraform will generate a password. |
 | `end_date` | `string` | The date after which the password expire. This can either be relative duration or RFC3339 date. Default: `1Y`. |
 | `role` | `string` | The name of a role for the service principal. |

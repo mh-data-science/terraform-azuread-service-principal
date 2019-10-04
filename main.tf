@@ -2,15 +2,8 @@ data "azurerm_client_config" "main" {}
 
 data "azurerm_subscription" "main" {}
 
-resource "random_id" "name" {
-  count  = var.name == "" ? 1 : 0
-  prefix = "terraform-"
-
-  byte_length = 4
-}
-
 resource "azuread_application" "main" {
-  name = coalesce(var.name, random_id.name[0].hex)
+  name = var.name
 
   available_to_other_tenants = false
 
