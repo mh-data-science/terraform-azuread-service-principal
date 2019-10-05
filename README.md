@@ -32,16 +32,6 @@ module "service_principal" {
 }
 ```
 
-### Create a password that never expires
-
-```hcl
-module "service_principal" {
-  source   = "innovationnorway/service-principal/azuread"
-  name     = "example"
-  end_date = "2299-12-30"
-}
-```
-
 ### Use file-based authentication (SDK)
 
 ```hcl
