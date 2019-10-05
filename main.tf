@@ -2,35 +2,19 @@ data "azurerm_client_config" "main" {}
 
 data "azurerm_subscription" "main" {}
 
-locals {
-  scopes = (
-    length(var.scopes) > 0 ?
-    var.scopes :
-    [data.azurerm_subscription.main.id]
-  )
-}
-
-resource "random_id" "name" {
-  count  = var.name == "" ? 1 : 0
-  prefix = "terraform-"
-
-  byte_length = 4
-}
-
 resource "azuread_application" "main" {
-  name = (
-    var.name != "" ?
-    var.name :
-    random_id.name[0].hex
-  )
+  name = var.name
+
   available_to_other_tenants = false
+
+  identifier_uris = [format("http://%s", var.name)]
 }
 
 resource "azuread_service_principal" "main" {
   application_id = azuread_application.main.application_id
 }
 
-resource "random_string" "password" {
+resource "random_password" "main" {
   count   = var.password == "" ? 1 : 0
   length  = 32
   special = true
@@ -40,18 +24,11 @@ resource "azuread_service_principal_password" "main" {
   count                = var.password != null ? 1 : 0
   service_principal_id = azuread_service_principal.main.id
 
-  value = (
-    var.password != "" ?
-    var.password :
-    random_string.password[0].result
-  )
-  end_date = var.end_date
+  value = coalesce(var.password, random_password.main[0].result)
 
-  end_date_relative = (
-    var.end_date == null ?
-    "${(var.years * 24 * 365)}h" :
-    null
-  )
+  end_date = local.end_date
+
+  end_date_relative = local.end_date_relative
 }
 
 data "azurerm_role_definition" "main" {

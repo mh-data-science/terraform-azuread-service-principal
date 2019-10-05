@@ -11,49 +11,33 @@ Create a service principal and configure it's access to Azure resources.
 ```hcl
 module "service_principal" {
   source   = "innovationnorway/service-principal/azuread"
-  name     = "my-app"
-  years    = 2
-}
-
-output "service_principal" {
-  value = module.service_principal
+  name     = "example"
+  end_date = "2Y"
 }
 ```
 
 ### Configure access to Azure resources
 
 ```hcl
-data "azurerm_subscriptions" "my" {}
-
-locals {
-  subscriptions = ({ 
-    for s in data.azurerm_subscriptions.my.subscriptions : 
-    s.display_name => format("/subscriptions/%s", s.subscription_id)
-  })
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "westeurope"
 }
 
 module "service_principal" {
   source = "innovationnorway/service-principal/azuread"
-  name   = "my-app"
+  name   = "example"
   role   = "Contributor"
-  scopes = [local.subscriptions["my-app"]]
-}
-```
-
-### Create a password that never expires
-
-```hcl
-module "service_principal" {
-  source   = "innovationnorway/service-principal/azuread"
-  end_date = "2299-12-30T23:00:00Z"
+  scopes = [azurerm_resource_group.example.id]
 }
 ```
 
 ### Use file-based authentication (SDK)
+
 ```hcl
 module "service_principal" {
   source = "innovationnorway/service-principal/azuread"
-  name   = "my-app"
+  name   = "example"
   role   = "Contributor"
 }
 
@@ -67,9 +51,8 @@ resource "local_file" "sdk_auth_file" {
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `name` | `string` | The name of the service principal. |
+| `name` | `string` | **Required.** The name of the service principal. |
 | `password` | `string` | A password for the service principal. If missing, Terraform will generate a password. |
-| `years` | `number` | Number of years for which the password will be valid. Default: `1`. |
-| `end_date` | `string` | Expiry date for the password. This should be RFC3339 date string. |
+| `end_date` | `string` | The date after which the password expire. This can either be relative duration or RFC3339 date. Default: `1Y`. |
 | `role` | `string` | The name of a role for the service principal. |
 | `scopes` | `list` | List of scopes the `role` assignment applies to. |

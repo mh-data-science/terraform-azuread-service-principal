@@ -1,4 +1,4 @@
-output "display_name" {
+output "name" {
   value       = azuread_service_principal.main.display_name
   description = "The display name of the Azure AD application."
 }
