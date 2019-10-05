@@ -22,7 +22,7 @@ variable "role" {
 }
 
 variable "scopes" {
-  type        = list
+  type        = list(string)
   default     = []
   description = "List of scopes the role assignment applies to."
 }
@@ -32,7 +32,7 @@ locals {
 
   date = regexall("^(?:(\\d{4})-(\\d{2})-(\\d{2}))[Tt]?(?:(\\d{2}):(\\d{2})(?::(\\d{2}))?(?:\\.(\\d+))?)?([Zz]|[\\+|\\-]\\d{2}:\\d{2})?$", var.end_date)
 
-  duration = regexall("^(?:(\\d?)Y)?(?:(\\d?)M)?(?:(\\d+)W)?(?:(\\d+)D)?(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?$", var.end_date)
+  duration = regexall("^(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)W)?(?:(\\d+)D)?(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?$", var.end_date)
 
   end_date_relative = length(local.duration) > 0 ? format(
     "%dh",
