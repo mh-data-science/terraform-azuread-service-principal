@@ -17,7 +17,7 @@ resource "azuread_service_principal" "main" {
 resource "random_password" "main" {
   count   = var.password == "" ? 1 : 0
   length  = 32
-  special = true
+  special = false
 }
 
 resource "azuread_service_principal_password" "main" {
